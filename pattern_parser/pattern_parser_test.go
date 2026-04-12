@@ -16,9 +16,10 @@ func TestPatternParser(t *testing.T) {
 	}
 	testCases := []TestCase{
 		{"block", 2, 2, "2o$2o!", "##\n##\n"},
-		{"something", 2, 1, "bo!", ".#\n"},
-		// {"beehive", 4, 3, "b2ob$o2bo$b2o!", ".##.\n#..#\n.##."},
-		// {"glider gun", 36, 9, "24bo11b$22bobo11b$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o14b$2o8bo3bob2o4bobo11b$10bo5bo7bo11b$11bo3bo20b$12b2o!"},
+		{"short", 2, 1, "bo!", ".#\n"},
+		{"preceeding", 13, 1, "12bo!", "............#\n"},
+		{"trailing", 13, 1, "o!", "#............\n"},
+		{"beehive", 4, 3, "b2ob$o2bo$b2o!", ".##.\n#..#\n.##.\n"},
 	}
 	for _, testCase := range testCases {
 		t.Run("test pattern parsing", func(t *testing.T) {

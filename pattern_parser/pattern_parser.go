@@ -55,6 +55,12 @@ func ParsePattern(x int, y int, pattern string) (Pattern, error) {
 			continue
 		}
 		if runeValue == '$' || runeValue == '!' {
+			if len(row) != x {
+				missingCells := x - len(row)
+				for range missingCells {
+					row = append(row, '.')
+				}
+			}
 			cells = append(cells, row)
 			row = []rune{}
 			repeat = 0
