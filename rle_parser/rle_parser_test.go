@@ -1,4 +1,4 @@
-package main
+package rle_parser
 
 import (
 	"os"
@@ -15,7 +15,7 @@ func assertStringsEqual(t testing.TB, want string, got string) {
 }
 
 func TestParseBlockRleFile(t *testing.T) {
-	blockPath := filepath.Join("patterns", "block.rle")
+	blockPath := filepath.Join("../", "patterns", "block.rle")
 	t.Run("test parsing pattern string", func(t *testing.T) {
 		patternData := ParseRleFile(blockPath)
 
@@ -43,16 +43,16 @@ func TestParseBlockRleFile(t *testing.T) {
 }
 
 func TestParseBeehiveRleFile(t *testing.T) {
-	blockPath := filepath.Join("patterns", "beehive.rle")
+	beehivePath := filepath.Join("../", "patterns", "beehive.rle")
 	t.Run("test parsing pattern string", func(t *testing.T) {
-		patternData := ParseRleFile(blockPath)
+		patternData := ParseRleFile(beehivePath)
 
 		want := "b2ob$o2bo$b2o"
 		assertStringsEqual(t, want, patternData.patternString)
 	})
 
 	t.Run("test parsing x dimension", func(t *testing.T) {
-		patternData := ParseRleFile(blockPath)
+		patternData := ParseRleFile(beehivePath)
 
 		want := 4
 		if patternData.x != want {
@@ -61,7 +61,7 @@ func TestParseBeehiveRleFile(t *testing.T) {
 	})
 
 	t.Run("test parsing y dimension", func(t *testing.T) {
-		patternData := ParseRleFile(blockPath)
+		patternData := ParseRleFile(beehivePath)
 
 		want := 3
 		if patternData.y != want {
