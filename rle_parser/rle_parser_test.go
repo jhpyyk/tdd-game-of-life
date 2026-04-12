@@ -1,10 +1,12 @@
-package rle_parser
+package rle_parser_test
 
 import (
 	"os"
 	"os/exec"
 	"path/filepath"
 	"testing"
+
+	parser "github.com/jhpyyk/tdd-game-of-life/rle_parser"
 )
 
 func assertStringsEqual(t testing.TB, want string, got string) {
@@ -17,27 +19,27 @@ func assertStringsEqual(t testing.TB, want string, got string) {
 func TestParseBlockRleFile(t *testing.T) {
 	blockPath := filepath.Join("../", "patterns", "block.rle")
 	t.Run("test parsing pattern string", func(t *testing.T) {
-		patternData := ParseRleFile(blockPath)
+		patternData := parser.ParseRleFile(blockPath)
 
 		want := "2o$2o"
-		assertStringsEqual(t, want, patternData.patternString)
+		assertStringsEqual(t, want, patternData.PatternString)
 	})
 
 	t.Run("test parsing x dimension", func(t *testing.T) {
-		patternData := ParseRleFile(blockPath)
+		patternData := parser.ParseRleFile(blockPath)
 
 		want := 2
-		if patternData.x != want {
-			t.Fatalf("incorrect pattern x dimension, wanted %v, got %v", want, patternData.x)
+		if patternData.X != want {
+			t.Fatalf("incorrect pattern x dimension, wanted %v, got %v", want, patternData.X)
 		}
 	})
 
 	t.Run("test parsing y dimension", func(t *testing.T) {
-		patternData := ParseRleFile(blockPath)
+		patternData := parser.ParseRleFile(blockPath)
 
 		want := 2
-		if patternData.y != want {
-			t.Fatalf("incorrect pattern y dimension, wanted %v, got %v", want, patternData.y)
+		if patternData.Y != want {
+			t.Fatalf("incorrect pattern y dimension, wanted %v, got %v", want, patternData.Y)
 		}
 	})
 }
@@ -45,34 +47,34 @@ func TestParseBlockRleFile(t *testing.T) {
 func TestParseBeehiveRleFile(t *testing.T) {
 	beehivePath := filepath.Join("../", "patterns", "beehive.rle")
 	t.Run("test parsing pattern string", func(t *testing.T) {
-		patternData := ParseRleFile(beehivePath)
+		patternData := parser.ParseRleFile(beehivePath)
 
 		want := "b2ob$o2bo$b2o"
-		assertStringsEqual(t, want, patternData.patternString)
+		assertStringsEqual(t, want, patternData.PatternString)
 	})
 
 	t.Run("test parsing x dimension", func(t *testing.T) {
-		patternData := ParseRleFile(beehivePath)
+		patternData := parser.ParseRleFile(beehivePath)
 
 		want := 4
-		if patternData.x != want {
-			t.Fatalf("incorrect pattern x dimension, wanted %v, got %v", want, patternData.x)
+		if patternData.X != want {
+			t.Fatalf("incorrect pattern x dimension, wanted %v, got %v", want, patternData.X)
 		}
 	})
 
 	t.Run("test parsing y dimension", func(t *testing.T) {
-		patternData := ParseRleFile(beehivePath)
+		patternData := parser.ParseRleFile(beehivePath)
 
 		want := 3
-		if patternData.y != want {
-			t.Fatalf("incorrect pattern y dimension, wanted %v, got %v", want, patternData.y)
+		if patternData.Y != want {
+			t.Fatalf("incorrect pattern y dimension, wanted %v, got %v", want, patternData.Y)
 		}
 	})
 }
 
 func TestParseRleFileCrash(t *testing.T) {
 	if os.Getenv("BE_CRASHER") == "1" {
-		ParseRleFile("invalidpath")
+		parser.ParseRleFile("invalidpath")
 		return
 	}
 	t.Run("Test program exits when invalid path", func(t *testing.T) {

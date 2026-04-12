@@ -12,9 +12,9 @@ import (
 )
 
 type RawPattern struct {
-	x             int
-	y             int
-	patternString string
+	X             int
+	Y             int
+	PatternString string
 }
 
 func ParseRleFile(path string) RawPattern {
@@ -39,11 +39,11 @@ func ParseRleFile(path string) RawPattern {
 		fmt.Fprintf(os.Stderr, "Error parsing file: %v. Exiting...", err)
 		os.Exit(1)
 	}
-	pat.x = xdim
-	pat.y = ydim
+	pat.X = xdim
+	pat.Y = ydim
 
 	patternString := parsePatternString(lines[headerIndex+1:])
-	pat.patternString = patternString
+	pat.PatternString = patternString
 	return pat
 }
 
