@@ -37,9 +37,19 @@ func ParsePattern(x int, y int, pattern string) (Pattern, error) {
 			repeat = 10*repeat + number
 			continue
 		}
+		if repeat == 0 {
+			repeat = 1
+		}
 		if runeValue == 'o' {
 			for range repeat {
 				row = append(row, '#')
+			}
+			repeat = 0
+			continue
+		}
+		if runeValue == 'b' {
+			for range repeat {
+				row = append(row, '.')
 			}
 			repeat = 0
 			continue
