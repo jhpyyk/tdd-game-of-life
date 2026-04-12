@@ -26,6 +26,7 @@ func ParseRleFile(path string) RawPattern {
 
 	pat := RawPattern{}
 	var sb strings.Builder
+	var patternStartsOnNextLine bool
 
 	reader := bufio.NewReader(file)
 
@@ -50,7 +51,12 @@ func ParseRleFile(path string) RawPattern {
 			trimmedLine = strings.Trim(trimmedLine, "!")
 		}
 
+		if patternStartsOnNextLine {
+			sb.WriteString(trimmedLine)
+		}
+
 		if trimmedLine[0] == 'x' {
+			patternStartsOnNextLine = true
 			splitted := strings.Split(trimmedLine, ",")
 			xdimString := stripRegex(splitted[0])
 			xdim, err := strconv.Atoi(xdimString)
@@ -68,11 +74,8 @@ func ParseRleFile(path string) RawPattern {
 			pat.y = ydim
 		}
 
-		if trimmedLine[0] == '2' {
-			sb.WriteString(trimmedLine)
-		}
-
 		if lastLine {
+			pat.patternString = sb.String()
 			break
 		}
 	}
