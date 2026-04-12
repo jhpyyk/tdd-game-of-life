@@ -4,24 +4,23 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 	"testing"
 )
 
-func assertPatternsEqual(t testing.TB, want string, got string) {
+func assertPatternCellsStringsEqual(t testing.TB, want string, got string) {
 	t.Helper()
-	if strings.TrimSpace(want) != strings.TrimSpace(got) {
+	if want != got {
 		t.Fatalf("Patterns are not equal, wanted %q, got %q", want, got)
 	}
 }
 
 func TestParseRleFile(t *testing.T) {
-	t.Run("test parsing", func(t *testing.T) {
+	t.Run("test parsing cells", func(t *testing.T) {
 		blockPath := filepath.Join("patterns", "block.rle")
 		parsed := ParseRleFile(blockPath)
 
-		want := "##\n##"
-		assertPatternsEqual(t, want, parsed.toString())
+		want := "2o$2o"
+		assertPatternCellsStringsEqual(t, want, parsed)
 	})
 
 }
