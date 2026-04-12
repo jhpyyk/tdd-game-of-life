@@ -52,12 +52,8 @@ func parsePatternString(lines []string) string {
 	for _, line := range lines {
 
 		trimmedLine := strings.TrimSpace(line)
-
-		if isLastLine(trimmedLine) {
-			lineWithoutExclamation := strings.Trim(trimmedLine, "!")
-			sb.WriteString(lineWithoutExclamation)
-			break
-		}
+		lineWithoutExclamation := strings.Trim(trimmedLine, "!")
+		sb.WriteString(lineWithoutExclamation)
 	}
 	return sb.String()
 }
