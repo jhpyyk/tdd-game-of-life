@@ -64,12 +64,18 @@ func parsePatternString(lines []string) string {
 
 func parseDimensionsFromHeader(header string) (int, int, error) {
 	splitted := strings.Split(header, ",")
-	xdimString := stripRegex(splitted[0])
+	xdimString, err := parseIntFromString(splitted[0])
+	if err != nil {
+		return 0, 0, fmt.Errorf("Error parsing x dimension from file %v. Exiting... %v", xdimString, err)
+	}
 	xdim, err := strconv.Atoi(xdimString)
 	if err != nil {
 		return 0, 0, fmt.Errorf("Error parsing x dimension from file %v. Exiting... %v", xdim, err)
 	}
-	ydimString := stripRegex(splitted[1])
+	ydimString, err := parseIntFromString(splitted[1])
+	if err != nil {
+		return 0, 0, fmt.Errorf("Error parsing y dimension from file %v. Exiting... %v", ydimString, err)
+	}
 	ydim, err := strconv.Atoi(ydimString)
 	if err != nil {
 		return 0, 0, fmt.Errorf("Error parsing y dimension from file %v. Exiting... %v", ydim, err)
@@ -108,11 +114,14 @@ func readLines(file *os.File) []string {
 	return lines
 }
 
-func stripRegex(in string) string {
-	reg, _ := regexp.Compile("[^0-9 ]+")
+func parseIntFromString(in string) (string, error) {
+	reg, err := regexp.Compile("[^0-9 ]+")
+	if err != nil {
+		return "", fmt.Errorf("Failed to parse int from string %v", err)
+	}
 	numeric := reg.ReplaceAllString(in, "")
 	trimmed := strings.TrimSpace(numeric)
-	return trimmed
+	return trimmed, nil
 }
 
 func main() {
