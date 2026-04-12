@@ -26,9 +26,9 @@ func TestParseRleFiles(t *testing.T) {
 	}
 
 	testCases := []TestCase{
-		{"block", filepath.Join("../", "patterns", "block.rle"), 2, 2, "2o$2o"},
-		{"beehive", filepath.Join("../", "patterns", "beehive.rle"), 4, 3, "b2ob$o2bo$b2o"},
-		{"glider gun", filepath.Join("../", "patterns", "gosper_glider_gun.rle"), 36, 9, "24bo11b$22bobo11b$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o14b$2o8bo3bob2o4bobo11b$10bo5bo7bo11b$11bo3bo20b$12b2o"},
+		{"block", filepath.Join("../", "patterns", "block.rle"), 2, 2, "2o$2o!"},
+		{"beehive", filepath.Join("../", "patterns", "beehive.rle"), 4, 3, "b2ob$o2bo$b2o!"},
+		{"glider gun", filepath.Join("../", "patterns", "gosper_glider_gun.rle"), 36, 9, "24bo11b$22bobo11b$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o14b$2o8bo3bob2o4bobo11b$10bo5bo7bo11b$11bo3bo20b$12b2o!"},
 	}
 
 	for _, testCase := range testCases {

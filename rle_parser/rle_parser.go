@@ -50,10 +50,8 @@ func ParseRleFile(path string) RawPattern {
 func parsePatternString(lines []string) string {
 	var sb strings.Builder
 	for _, line := range lines {
-
 		trimmedLine := strings.TrimSpace(line)
-		lineWithoutExclamation := strings.Trim(trimmedLine, "!")
-		sb.WriteString(lineWithoutExclamation)
+		sb.WriteString(trimmedLine)
 	}
 	return sb.String()
 }
@@ -87,10 +85,6 @@ func findHeaderLineIndex(lines []string) (int, error) {
 		}
 	}
 	return 0, errors.New("Cannot parse header")
-}
-
-func isLastLine(line string) bool {
-	return strings.Contains(line, "!")
 }
 
 func readLines(file *os.File) []string {
