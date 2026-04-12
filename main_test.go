@@ -15,12 +15,21 @@ func assertPatternCellsStringsEqual(t testing.TB, want string, got string) {
 }
 
 func TestParseRleFile(t *testing.T) {
-	t.Run("test parsing cells", func(t *testing.T) {
-		blockPath := filepath.Join("patterns", "block.rle")
-		parsed := ParseRleFile(blockPath)
+	blockPath := filepath.Join("patterns", "block.rle")
+	t.Run("test parsing pattern string", func(t *testing.T) {
+		patternData := ParseRleFile(blockPath)
 
 		want := "2o$2o"
-		assertPatternCellsStringsEqual(t, want, parsed)
+		assertPatternCellsStringsEqual(t, want, patternData.patternString)
+	})
+
+	t.Run("test parsing x dimension", func(t *testing.T) {
+		patternData := ParseRleFile(blockPath)
+
+		want := 2
+		if patternData.x != want {
+			t.Fatalf("incorrect pattern x dimension, wanted %v, got %v", want, patternData.x)
+		}
 	})
 
 }

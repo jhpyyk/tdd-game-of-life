@@ -5,28 +5,18 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
-type Pattern struct {
-	x     int
-	y     int
-	cells [][]string
+type RawPattern struct {
+	x             int
+	y             int
+	patternString string
 }
 
-func (pattern *Pattern) toString() string {
-	var sb strings.Builder
-
-	for _, row := range pattern.cells {
-		for _, col := range row {
-			sb.WriteString(col)
-		}
-		sb.WriteString("\n")
-	}
-	return sb.String()
-}
-
-func ParseRleFile(path string) string {
+func ParseRleFile(path string) RawPattern {
 	file, err := os.Open(path)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error opening file. Exiting... %v", err)
@@ -34,9 +24,11 @@ func ParseRleFile(path string) string {
 	}
 	defer file.Close()
 
+	pat := RawPattern{}
 	var sb strings.Builder
 
 	reader := bufio.NewReader(file)
+
 	for {
 		line, err := reader.ReadString('\n')
 
@@ -47,13 +39,33 @@ func ParseRleFile(path string) string {
 			fmt.Fprintf(os.Stderr, "Error reading file. Exiting... %v", err)
 			os.Exit(1)
 		}
+
 		var trimmedLine string
-		trimmedLine = strings.TrimSpace(line)
 		var lastLine bool
+
+		trimmedLine = strings.TrimSpace(line)
 
 		if trimmedLine[len(trimmedLine)-1] == '!' {
 			lastLine = true
 			trimmedLine = strings.Trim(trimmedLine, "!")
+		}
+
+		if trimmedLine[0] == 'x' {
+			splitted := strings.Split(trimmedLine, ",")
+			xdimString := stripRegex(splitted[0])
+			xdim, err := strconv.Atoi(xdimString)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error parsing x dimension from file %v. Exiting... %v", xdim, err)
+				os.Exit(1)
+			}
+			ydimString := stripRegex(splitted[1])
+			ydim, err := strconv.Atoi(ydimString)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error parsing y dimension from file %v. Exiting... %v", ydim, err)
+				os.Exit(1)
+			}
+			pat.x = xdim
+			pat.y = ydim
 		}
 
 		if trimmedLine[0] == '2' {
@@ -64,7 +76,14 @@ func ParseRleFile(path string) string {
 			break
 		}
 	}
-	return sb.String()
+	return pat
+}
+
+func stripRegex(in string) string {
+	reg, _ := regexp.Compile("[^0-9 ]+")
+	numeric := reg.ReplaceAllString(in, "")
+	trimmed := strings.TrimSpace(numeric)
+	return trimmed
 }
 
 func main() {
