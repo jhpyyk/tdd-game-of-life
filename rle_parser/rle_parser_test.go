@@ -16,88 +16,45 @@ func assertStringsEqual(t testing.TB, want string, got string) {
 	}
 }
 
-func TestParseBlockRleFile(t *testing.T) {
-	blockPath := filepath.Join("../", "patterns", "block.rle")
-	t.Run("test parsing pattern string", func(t *testing.T) {
-		patternData := parser.ParseRleFile(blockPath)
+func TestParseRleFiles(t *testing.T) {
+	type TestCase struct {
+		name    string
+		path    string
+		x       int
+		y       int
+		pattern string
+	}
 
-		want := "2o$2o"
-		assertStringsEqual(t, want, patternData.PatternString)
-	})
+	testCases := []TestCase{
+		{"block", filepath.Join("../", "patterns", "block.rle"), 2, 2, "2o$2o"},
+		{"beehive", filepath.Join("../", "patterns", "beehive.rle"), 4, 3, "b2ob$o2bo$b2o"},
+		{"glider gun", filepath.Join("../", "patterns", "gosper_glider_gun.rle"), 36, 9, "24bo11b$22bobo11b$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o14b$2o8bo3bob2o4bobo11b$10bo5bo7bo11b$11bo3bo20b$12b2o"},
+	}
 
-	t.Run("test parsing x dimension", func(t *testing.T) {
-		patternData := parser.ParseRleFile(blockPath)
+	for _, testCase := range testCases {
+		t.Run("test parsing pattern string", func(t *testing.T) {
+			patternData := parser.ParseRleFile(testCase.path)
+			assertStringsEqual(t, testCase.pattern, patternData.PatternString)
+		})
 
-		want := 2
-		if patternData.X != want {
-			t.Fatalf("incorrect pattern x dimension, wanted %v, got %v", want, patternData.X)
-		}
-	})
+		t.Run("test parsing x dimension", func(t *testing.T) {
+			patternData := parser.ParseRleFile(testCase.path)
 
-	t.Run("test parsing y dimension", func(t *testing.T) {
-		patternData := parser.ParseRleFile(blockPath)
+			want := testCase.x
+			if patternData.X != want {
+				t.Fatalf("incorrect pattern x dimension, wanted %v, got %v", want, patternData.X)
+			}
+		})
 
-		want := 2
-		if patternData.Y != want {
-			t.Fatalf("incorrect pattern y dimension, wanted %v, got %v", want, patternData.Y)
-		}
-	})
-}
+		t.Run("test parsing y dimension", func(t *testing.T) {
+			patternData := parser.ParseRleFile(testCase.path)
 
-func TestParseBeehiveRleFile(t *testing.T) {
-	beehivePath := filepath.Join("../", "patterns", "beehive.rle")
-	t.Run("test parsing pattern string", func(t *testing.T) {
-		patternData := parser.ParseRleFile(beehivePath)
-
-		want := "b2ob$o2bo$b2o"
-		assertStringsEqual(t, want, patternData.PatternString)
-	})
-
-	t.Run("test parsing x dimension", func(t *testing.T) {
-		patternData := parser.ParseRleFile(beehivePath)
-
-		want := 4
-		if patternData.X != want {
-			t.Fatalf("incorrect pattern x dimension, wanted %v, got %v", want, patternData.X)
-		}
-	})
-
-	t.Run("test parsing y dimension", func(t *testing.T) {
-		patternData := parser.ParseRleFile(beehivePath)
-
-		want := 3
-		if patternData.Y != want {
-			t.Fatalf("incorrect pattern y dimension, wanted %v, got %v", want, patternData.Y)
-		}
-	})
-}
-
-func TestParseGliderGunRleFile(t *testing.T) {
-	gliderGun := filepath.Join("../", "patterns", "gosper_glider_gun.rle")
-	t.Run("test parsing pattern string", func(t *testing.T) {
-		patternData := parser.ParseRleFile(gliderGun)
-
-		want := "24bo11b$22bobo11b$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o14b$2o8bo3bob2o4bobo11b$10bo5bo7bo11b$11bo3bo20b$12b2o"
-		assertStringsEqual(t, want, patternData.PatternString)
-	})
-
-	t.Run("test parsing x dimension", func(t *testing.T) {
-		patternData := parser.ParseRleFile(gliderGun)
-
-		want := 36
-		if patternData.X != want {
-			t.Fatalf("incorrect pattern x dimension, wanted %v, got %v", want, patternData.X)
-		}
-	})
-
-	t.Run("test parsing y dimension", func(t *testing.T) {
-		patternData := parser.ParseRleFile(gliderGun)
-
-		want := 9
-		if patternData.Y != want {
-			t.Fatalf("incorrect pattern y dimension, wanted %v, got %v", want, patternData.Y)
-		}
-	})
+			want := testCase.y
+			if patternData.Y != want {
+				t.Fatalf("incorrect pattern y dimension, wanted %v, got %v", want, patternData.Y)
+			}
+		})
+	}
 }
 
 func TestParseRleFileCrash(t *testing.T) {
