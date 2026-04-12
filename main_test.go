@@ -7,20 +7,20 @@ import (
 	"testing"
 )
 
-func assertPatternCellsStringsEqual(t testing.TB, want string, got string) {
+func assertStringsEqual(t testing.TB, want string, got string) {
 	t.Helper()
 	if want != got {
 		t.Fatalf("Patterns are not equal, wanted %q, got %q", want, got)
 	}
 }
 
-func TestParseRleFile(t *testing.T) {
+func TestParseBlockRleFile(t *testing.T) {
 	blockPath := filepath.Join("patterns", "block.rle")
 	t.Run("test parsing pattern string", func(t *testing.T) {
 		patternData := ParseRleFile(blockPath)
 
 		want := "2o$2o"
-		assertPatternCellsStringsEqual(t, want, patternData.patternString)
+		assertStringsEqual(t, want, patternData.patternString)
 	})
 
 	t.Run("test parsing x dimension", func(t *testing.T) {
@@ -32,6 +32,42 @@ func TestParseRleFile(t *testing.T) {
 		}
 	})
 
+	t.Run("test parsing y dimension", func(t *testing.T) {
+		patternData := ParseRleFile(blockPath)
+
+		want := 2
+		if patternData.y != want {
+			t.Fatalf("incorrect pattern y dimension, wanted %v, got %v", want, patternData.y)
+		}
+	})
+}
+
+func TestParseBeehiveRleFile(t *testing.T) {
+	blockPath := filepath.Join("patterns", "beehive.rle")
+	t.Run("test parsing pattern string", func(t *testing.T) {
+		patternData := ParseRleFile(blockPath)
+
+		want := "b2ob$o2bo$b2o"
+		assertStringsEqual(t, want, patternData.patternString)
+	})
+
+	t.Run("test parsing x dimension", func(t *testing.T) {
+		patternData := ParseRleFile(blockPath)
+
+		want := 4
+		if patternData.x != want {
+			t.Fatalf("incorrect pattern x dimension, wanted %v, got %v", want, patternData.x)
+		}
+	})
+
+	t.Run("test parsing y dimension", func(t *testing.T) {
+		patternData := ParseRleFile(blockPath)
+
+		want := 3
+		if patternData.y != want {
+			t.Fatalf("incorrect pattern y dimension, wanted %v, got %v", want, patternData.y)
+		}
+	})
 }
 
 func TestParseRleFileCrash(t *testing.T) {

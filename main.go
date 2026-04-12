@@ -28,18 +28,9 @@ func ParseRleFile(path string) RawPattern {
 	var sb strings.Builder
 	var patternStartsOnNextLine bool
 
-	reader := bufio.NewReader(file)
+	lines := readLines(file)
 
-	for {
-		line, err := reader.ReadString('\n')
-
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			fmt.Fprintf(os.Stderr, "Error reading file. Exiting... %v", err)
-			os.Exit(1)
-		}
+	for _, line := range lines {
 
 		var trimmedLine string
 		var lastLine bool
@@ -80,6 +71,23 @@ func ParseRleFile(path string) RawPattern {
 		}
 	}
 	return pat
+}
+
+func readLines(file *os.File) []string {
+	lines := []string{}
+	reader := bufio.NewReader(file)
+	for {
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			fmt.Fprintf(os.Stderr, "Error reading file. Exiting... %v", err)
+			os.Exit(1)
+		}
+		lines = append(lines, line)
+	}
+	return lines
 }
 
 func stripRegex(in string) string {
