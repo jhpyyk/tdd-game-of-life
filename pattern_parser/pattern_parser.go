@@ -10,14 +10,19 @@ import (
 type Pattern struct {
 	x     int
 	y     int
-	cells [][]rune
+	cells [][]int
 }
 
 func (pattern *Pattern) ToString() string {
 	var sb strings.Builder
 	for _, row := range pattern.cells {
 		for _, cell := range row {
-			sb.WriteRune(cell)
+			if cell == 1 {
+				sb.WriteRune('#')
+			}
+			if cell == 0 {
+				sb.WriteRune('.')
+			}
 		}
 		sb.WriteRune('\n')
 	}
@@ -25,9 +30,9 @@ func (pattern *Pattern) ToString() string {
 }
 
 func ParsePattern(x int, y int, pattern string) (Pattern, error) {
-	cells := [][]rune{}
+	cells := [][]int{}
 	repeat := 0
-	row := []rune{}
+	row := []int{}
 	for _, runeValue := range pattern {
 		if unicode.IsDigit(runeValue) {
 			number, err := strconv.Atoi(string(runeValue))
@@ -42,14 +47,14 @@ func ParsePattern(x int, y int, pattern string) (Pattern, error) {
 		}
 		if runeValue == 'o' {
 			for range repeat {
-				row = append(row, '#')
+				row = append(row, 1)
 			}
 			repeat = 0
 			continue
 		}
 		if runeValue == 'b' {
 			for range repeat {
-				row = append(row, '.')
+				row = append(row, 0)
 			}
 			repeat = 0
 			continue
@@ -58,11 +63,11 @@ func ParsePattern(x int, y int, pattern string) (Pattern, error) {
 			if len(row) != x {
 				missingCells := x - len(row)
 				for range missingCells {
-					row = append(row, '.')
+					row = append(row, 0)
 				}
 			}
 			cells = append(cells, row)
-			row = []rune{}
+			row = []int{}
 			repeat = 0
 			continue
 		}
