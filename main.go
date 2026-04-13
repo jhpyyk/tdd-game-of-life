@@ -14,7 +14,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	pat, err := pattern.ParsePattern(raw.X, raw.Y, raw.PatternString)
+	pat, err := pattern.ParsePatternFromRLEPatternString(raw.X, raw.Y, raw.PatternString)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -13,6 +13,15 @@ type Pattern struct {
 	cells [][]int
 }
 
+func (pattern *Pattern) GetNextGeneration() Pattern {
+	nextGen := Pattern{
+		pattern.x,
+		pattern.y,
+		pattern.cells,
+	}
+	return nextGen
+}
+
 func (pattern *Pattern) ToString() string {
 	var sb strings.Builder
 	for _, row := range pattern.cells {
@@ -29,7 +38,7 @@ func (pattern *Pattern) ToString() string {
 	return sb.String()
 }
 
-func ParsePattern(x int, y int, pattern string) (Pattern, error) {
+func ParsePatternFromRLEPatternString(x int, y int, pattern string) (Pattern, error) {
 	cells := [][]int{}
 	repeat := 0
 	row := []int{}
