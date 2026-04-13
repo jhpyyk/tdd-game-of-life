@@ -1,4 +1,4 @@
-package pattern_parser
+package pattern
 
 import (
 	"fmt"

@@ -1,9 +1,9 @@
-package pattern_parser_test
+package pattern_test
 
 import (
 	"testing"
 
-	parser "github.com/jhpyyk/tdd-game-of-life/pattern_parser"
+	"github.com/jhpyyk/tdd-game-of-life/pattern"
 	helpers "github.com/jhpyyk/tdd-game-of-life/test_helpers"
 )
 
@@ -45,7 +45,7 @@ func TestPatternParser(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run("test pattern parsing", func(t *testing.T) {
 
-			pattern, err := parser.ParsePattern(testCase.x, testCase.y, testCase.pattern)
+			pattern, err := pattern.ParsePattern(testCase.x, testCase.y, testCase.pattern)
 			if err != nil {
 				t.Fatal(err.Error())
 			}

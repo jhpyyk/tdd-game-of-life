@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/jhpyyk/tdd-game-of-life/pattern_parser"
+	"github.com/jhpyyk/tdd-game-of-life/pattern"
 	"github.com/jhpyyk/tdd-game-of-life/rle_parser"
 )
 
@@ -14,7 +14,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	pat, err := pattern_parser.ParsePattern(raw.X, raw.Y, raw.PatternString)
+	pat, err := pattern.ParsePattern(raw.X, raw.Y, raw.PatternString)
 	if err != nil {
 		log.Fatal(err)
 	}
