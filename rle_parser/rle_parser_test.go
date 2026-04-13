@@ -1,8 +1,6 @@
 package rle_parser_test
 
 import (
-	"os"
-	"os/exec"
 	"path/filepath"
 	"testing"
 
@@ -33,12 +31,18 @@ func TestParseRleFiles(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run("test parsing pattern string", func(t *testing.T) {
-			patternData := parser.ParseRleFile(testCase.path)
+			patternData, err := parser.ParseRleFile(testCase.path)
+			if err != nil {
+				t.Fatalf("error parsing file")
+			}
 			assertStringsEqual(t, testCase.pattern, patternData.PatternString)
 		})
 
 		t.Run("test parsing x dimension", func(t *testing.T) {
-			patternData := parser.ParseRleFile(testCase.path)
+			patternData, err := parser.ParseRleFile(testCase.path)
+			if err != nil {
+				t.Fatalf("error parsing file")
+			}
 
 			want := testCase.x
 			if patternData.X != want {
@@ -47,7 +51,10 @@ func TestParseRleFiles(t *testing.T) {
 		})
 
 		t.Run("test parsing y dimension", func(t *testing.T) {
-			patternData := parser.ParseRleFile(testCase.path)
+			patternData, err := parser.ParseRleFile(testCase.path)
+			if err != nil {
+				t.Fatalf("error parsing file")
+			}
 
 			want := testCase.y
 			if patternData.Y != want {
@@ -55,20 +62,4 @@ func TestParseRleFiles(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestParseRleFileCrash(t *testing.T) {
-	if os.Getenv("BE_CRASHER") == "1" {
-		parser.ParseRleFile("invalidpath")
-		return
-	}
-	t.Run("Test program exits when invalid path", func(t *testing.T) {
-		cmd := exec.Command(os.Args[0], "-test.run=TestParseRleFileCrash")
-		cmd.Env = append(os.Environ(), "BE_CRASHER=1")
-		err := cmd.Run()
-		if e, ok := err.(*exec.ExitError); ok && !e.Success() {
-			return
-		}
-		t.Fatalf("process ran with err %v, want exit status 1", err)
-	})
 }

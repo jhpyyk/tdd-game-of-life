@@ -17,11 +17,10 @@ type RawPattern struct {
 	PatternString string
 }
 
-func ParseRleFile(path string) RawPattern {
+func ParseRleFile(path string) (RawPattern, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error opening file. Exiting... %v", err)
-		os.Exit(1)
+		return RawPattern{}, fmt.Errorf("Error opening file. Exiting... %v", err)
 	}
 	defer file.Close()
 
@@ -44,7 +43,7 @@ func ParseRleFile(path string) RawPattern {
 
 	patternString := parsePatternString(lines[headerIndex+1:])
 	pat.PatternString = patternString
-	return pat
+	return pat, nil
 }
 
 func parsePatternString(lines []string) string {
