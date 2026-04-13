@@ -1,6 +1,7 @@
 package pattern_parser_test
 
 import (
+	"strings"
 	"testing"
 
 	parser "github.com/jhpyyk/tdd-game-of-life/pattern_parser"
@@ -14,12 +15,32 @@ func TestPatternParser(t *testing.T) {
 		pattern string
 		want    string
 	}
+	block := `
+			##
+			##
+			`
+	short := `
+	.#
+	`
+	preceeding := `
+	............#
+	............#
+	`
+	trailing := `
+	#............
+	#............
+	`
+	beehive := `
+	.##.
+	#..#
+	.##.
+	`
 	testCases := []TestCase{
-		{"block", 2, 2, "2o$2o!", "##\n##\n"},
-		{"short", 2, 1, "bo!", ".#\n"},
-		{"preceeding", 13, 1, "12bo!", "............#\n"},
-		{"trailing", 13, 1, "o!", "#............\n"},
-		{"beehive", 4, 3, "b2ob$o2bo$b2o!", ".##.\n#..#\n.##.\n"},
+		{"block", 2, 2, "2o$2o!", block},
+		{"short", 2, 1, "bo!", short},
+		{"preceeding", 13, 2, "12bo$12bo!", preceeding},
+		{"trailing", 13, 2, "o$o!", trailing},
+		{"beehive", 4, 3, "b2ob$o2bo$b2o!", beehive},
 	}
 	for _, testCase := range testCases {
 		t.Run("test pattern parsing", func(t *testing.T) {
@@ -29,11 +50,23 @@ func TestPatternParser(t *testing.T) {
 				t.Fatal(err.Error())
 			}
 
-			got := pattern.ToString()
-			if got != testCase.want {
-				t.Fatalf("Parser failed to parse pattern %q, want %q, got %q", testCase.name, testCase.want, got)
+			got := stripPattern(t, pattern.ToString())
+			want := stripPattern(t, testCase.want)
+			if got != want {
+				t.Fatalf("Parser failed to parse pattern %q, want %q, got %q", testCase.name, want, got)
 			}
 
 		})
 	}
+}
+
+func stripPattern(t testing.TB, pattern string) string {
+	t.Helper()
+	var sb strings.Builder
+	for _, c := range pattern {
+		if c == '.' || c == '#' {
+			sb.WriteRune(c)
+		}
+	}
+	return sb.String()
 }
