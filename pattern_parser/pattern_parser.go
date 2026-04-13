@@ -45,32 +45,23 @@ func ParsePattern(x int, y int, pattern string) (Pattern, error) {
 		if repeat == 0 {
 			repeat = 1
 		}
-		if runeValue == 'o' {
+		switch runeValue {
+		case 'o':
 			for range repeat {
 				row = append(row, 1)
 			}
-			repeat = 0
-			continue
-		}
-		if runeValue == 'b' {
+		case 'b':
 			for range repeat {
 				row = append(row, 0)
 			}
-			repeat = 0
-			continue
-		}
-		if runeValue == '$' || runeValue == '!' {
+		case '$', '!':
 			if len(row) != x {
-				missingCells := x - len(row)
-				for range missingCells {
-					row = append(row, 0)
-				}
+				row = addPaddingToRow(x, row)
 			}
 			cells = append(cells, row)
 			row = []int{}
-			repeat = 0
-			continue
 		}
+		repeat = 0
 	}
 	pat := Pattern{
 		x:     x,
@@ -79,4 +70,12 @@ func ParsePattern(x int, y int, pattern string) (Pattern, error) {
 	}
 
 	return pat, nil
+}
+
+func addPaddingToRow(x int, row []int) []int {
+	missingCells := x - len(row)
+	for range missingCells {
+		row = append(row, 0)
+	}
+	return row
 }
