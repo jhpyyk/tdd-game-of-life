@@ -1,10 +1,10 @@
 package pattern_parser_test
 
 import (
-	"strings"
 	"testing"
 
 	parser "github.com/jhpyyk/tdd-game-of-life/pattern_parser"
+	helpers "github.com/jhpyyk/tdd-game-of-life/test_helpers"
 )
 
 func TestPatternParser(t *testing.T) {
@@ -50,23 +50,12 @@ func TestPatternParser(t *testing.T) {
 				t.Fatal(err.Error())
 			}
 
-			got := stripPattern(t, pattern.ToString())
-			want := stripPattern(t, testCase.want)
+			got := helpers.StripPattern(t, pattern.ToString())
+			want := helpers.StripPattern(t, testCase.want)
 			if got != want {
 				t.Fatalf("Parser failed to parse pattern %q, want %q, got %q", testCase.name, want, got)
 			}
 
 		})
 	}
-}
-
-func stripPattern(t testing.TB, pattern string) string {
-	t.Helper()
-	var sb strings.Builder
-	for _, c := range pattern {
-		if c == '.' || c == '#' {
-			sb.WriteRune(c)
-		}
-	}
-	return sb.String()
 }
