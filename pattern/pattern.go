@@ -8,15 +8,17 @@ import (
 )
 
 type Pattern struct {
-	x     int
-	y     int
-	cells [][]int
+	x          int
+	y          int
+	generation int
+	cells      [][]int
 }
 
 func (pattern *Pattern) GetNextGeneration() Pattern {
 	nextGen := Pattern{
 		pattern.x,
 		pattern.y,
+		pattern.generation + 1,
 		pattern.cells,
 	}
 	return nextGen
@@ -36,6 +38,45 @@ func (pattern *Pattern) ToString() string {
 		sb.WriteRune('\n')
 	}
 	return sb.String()
+}
+
+func stripPattern(pattern string) string {
+	var sb strings.Builder
+	for _, c := range pattern {
+		if c == '.' || c == '#' {
+			sb.WriteRune(c)
+		}
+	}
+	return sb.String()
+}
+
+func FromString(x int, y int, patternString string) (Pattern, error) {
+	stripped := stripPattern(patternString)
+	length := len(stripped)
+	if length < x*y {
+		return Pattern{}, fmt.Errorf("Error: pattern length %v does not match dimensions x: %v, y: %v", length, x, y)
+	}
+
+	cells := [][]int{}
+	for i := range x {
+		row := []int{}
+		for j := range y {
+			if stripped[(i+1)*(j+1)-1] == '.' {
+				row = append(row, 0)
+			}
+			if stripped[(i+1)*(j+1)-1] == '#' {
+				row = append(row, 1)
+			}
+		}
+		cells = append(cells, row)
+	}
+	pat := Pattern{
+		x,
+		y,
+		0,
+		cells,
+	}
+	return pat, nil
 }
 
 func ParsePatternFromRLEPatternString(x int, y int, pattern string) (Pattern, error) {
@@ -73,9 +114,10 @@ func ParsePatternFromRLEPatternString(x int, y int, pattern string) (Pattern, er
 		repeat = 0
 	}
 	pat := Pattern{
-		x:     x,
-		y:     y,
-		cells: cells,
+		x:          x,
+		y:          y,
+		generation: 0,
+		cells:      cells,
 	}
 
 	return pat, nil

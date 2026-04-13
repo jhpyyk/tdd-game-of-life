@@ -74,16 +74,12 @@ func TestPatternGeneration(t *testing.T) {
 	}
 
 	testCases := []TestCase{
-		{"block", 2, 2, "2o$2o!", block},
-		// {"short", 2, 1, "bo!", short},
-		// {"preceeding", 13, 2, "12bo$12bo!", preceeding},
-		// {"trailing", 13, 2, "o$o!", trailing},
-		// {"beehive", 4, 3, "b2ob$o2bo$b2o!", beehive},
+		{"block", 2, 2, block, block},
 	}
 	for _, testCase := range testCases {
 		t.Run("test pattern generation", func(t *testing.T) {
 
-			pattern, err := pattern.ParsePatternFromRLEPatternString(testCase.x, testCase.y, testCase.pattern)
+			pattern, err := pattern.FromString(testCase.x, testCase.y, testCase.pattern)
 			if err != nil {
 				t.Fatal(err.Error())
 			}
@@ -98,4 +94,18 @@ func TestPatternGeneration(t *testing.T) {
 
 		})
 	}
+}
+
+func TestPatternStringConversion(t *testing.T) {
+	pattern, err := pattern.FromString(2, 2, block)
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+
+	got := helpers.StripPattern(t, pattern.ToString())
+	want := helpers.StripPattern(t, block)
+	if got != want {
+		t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)
+	}
+
 }
