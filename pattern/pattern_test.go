@@ -72,9 +72,14 @@ func TestPatternGeneration(t *testing.T) {
 		pattern string
 		want    string
 	}
+	blockNoCorner := `
+	#.
+	##
+	`
 
 	testCases := []TestCase{
 		{"block", 2, 2, block, block},
+		{"block without corner", 2, 2, blockNoCorner, block},
 	}
 	for _, testCase := range testCases {
 		t.Run("test pattern generation", func(t *testing.T) {
@@ -89,7 +94,7 @@ func TestPatternGeneration(t *testing.T) {
 			got := utils.StripPattern(nextGen.ToString())
 			want := utils.StripPattern(testCase.want)
 			if got != want {
-				t.Fatalf("Parser failed to parse pattern %q, want %q, got %q", testCase.name, want, got)
+				t.Fatalf("failed to get next generation for %q, want %q, got %q", testCase.name, want, got)
 			}
 
 		})
