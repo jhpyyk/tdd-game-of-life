@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	"testing"
 
-	helpers "github.com/jhpyyk/tdd-game-of-life/test_helpers"
+	"github.com/jhpyyk/tdd-game-of-life/utils"
 )
 
 func TestMain(t *testing.T) {
@@ -16,13 +16,13 @@ func TestMain(t *testing.T) {
 			t.Fatalf("error while running main %q", err.Error())
 		}
 
-		got := helpers.StripPattern(t, string(out))
+		got := utils.StripPattern(string(out))
 		block := `
 		##
 		##
 		`
 
-		want := helpers.StripPattern(t, block)
+		want := utils.StripPattern(block)
 		if got != want {
 			t.Fatalf("wrong output, wanted %q, got %q", want, got)
 		}

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/jhpyyk/tdd-game-of-life/pattern"
-	helpers "github.com/jhpyyk/tdd-game-of-life/test_helpers"
+	"github.com/jhpyyk/tdd-game-of-life/utils"
 )
 
 const (
@@ -54,8 +54,8 @@ func TestPatternParser(t *testing.T) {
 				t.Fatal(err.Error())
 			}
 
-			got := helpers.StripPattern(t, pattern.ToString())
-			want := helpers.StripPattern(t, testCase.want)
+			got := utils.StripPattern(pattern.ToString())
+			want := utils.StripPattern(testCase.want)
 			if got != want {
 				t.Fatalf("Parser failed to parse pattern %q, want %q, got %q", testCase.name, want, got)
 			}
@@ -86,8 +86,8 @@ func TestPatternGeneration(t *testing.T) {
 
 			nextGen := pattern.GetNextGeneration()
 
-			got := helpers.StripPattern(t, nextGen.ToString())
-			want := helpers.StripPattern(t, testCase.want)
+			got := utils.StripPattern(nextGen.ToString())
+			want := utils.StripPattern(testCase.want)
 			if got != want {
 				t.Fatalf("Parser failed to parse pattern %q, want %q, got %q", testCase.name, want, got)
 			}
@@ -102,8 +102,8 @@ func TestPatternStringConversion(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	got := helpers.StripPattern(t, pattern.ToString())
-	want := helpers.StripPattern(t, block)
+	got := utils.StripPattern(pattern.ToString())
+	want := utils.StripPattern(block)
 	if got != want {
 		t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)
 	}

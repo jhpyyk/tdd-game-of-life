@@ -1,12 +1,10 @@
-package test_helpers
+package utils
 
 import (
 	"strings"
-	"testing"
 )
 
-func StripPattern(t testing.TB, pattern string) string {
-	t.Helper()
+func StripPattern(pattern string) string {
 	var sb strings.Builder
 	for _, c := range pattern {
 		if c == '.' || c == '#' {

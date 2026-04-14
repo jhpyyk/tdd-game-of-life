@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/jhpyyk/tdd-game-of-life/utils"
 )
 
 type Pattern struct {
@@ -40,18 +42,8 @@ func (pattern *Pattern) ToString() string {
 	return sb.String()
 }
 
-func stripPattern(pattern string) string {
-	var sb strings.Builder
-	for _, c := range pattern {
-		if c == '.' || c == '#' {
-			sb.WriteRune(c)
-		}
-	}
-	return sb.String()
-}
-
 func FromString(x int, y int, patternString string) (Pattern, error) {
-	stripped := stripPattern(patternString)
+	stripped := utils.StripPattern(patternString)
 	length := len(stripped)
 	if length < x*y {
 		return Pattern{}, fmt.Errorf("Error: pattern length %v does not match dimensions x: %v, y: %v", length, x, y)
