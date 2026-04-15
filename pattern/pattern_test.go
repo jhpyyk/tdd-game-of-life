@@ -89,11 +89,24 @@ func TestPatternGeneration(t *testing.T) {
 		.##
 		.#.
 	`
+	gliderAfter2 := `
+		..#
+		#.#
+		.##
+	`
+	gliderAfter3 := `
+		#..
+		.##
+		##.
+	`
 
 	testCases := []TestCase{
 		{"block", 2, 2, 1, block, block},
 		{"block without corner", 2, 2, 1, blockNoCorner, block},
-		{"glider", 3, 3, 1, glider, gliderAfter1},
+		{"glider after 1", 3, 3, 1, glider, gliderAfter1},
+		{"glider after 2", 3, 3, 2, glider, gliderAfter2},
+		{"glider after 3", 3, 3, 3, glider, gliderAfter3},
+		{"glider after 4", 3, 3, 4, glider, glider},
 	}
 	for _, testCase := range testCases {
 		t.Run("test pattern generation", func(t *testing.T) {
