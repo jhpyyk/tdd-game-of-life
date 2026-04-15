@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -76,8 +75,7 @@ func TrimPadding(mat [][]int) [][]int {
 		}
 	}
 	if topRowEmpty {
-		mat = mat[1:]
-		fmt.Println(mat)
+		mat = removeTopRow(mat)
 	}
 
 	bottomRowEmpty := true
@@ -88,8 +86,7 @@ func TrimPadding(mat [][]int) [][]int {
 		}
 	}
 	if bottomRowEmpty {
-		mat = mat[:len(mat)-1]
-		fmt.Println(mat)
+		mat = removeBottomRow(mat)
 	}
 
 	leftColEmpty := true
@@ -100,35 +97,47 @@ func TrimPadding(mat [][]int) [][]int {
 		}
 	}
 
-	result := [][]int{}
 	if leftColEmpty {
-		for _, row := range mat {
-			result = append(result, row[1:])
-		}
-	} else {
-		result = mat
+		mat = removeLeftColumn(mat)
 	}
 
 	rightColEmpty := true
-	for _, row := range result {
+	for _, row := range mat {
 		if row[len(row)-1] != 0 {
 			rightColEmpty = false
 			break
 		}
 	}
-
-	result2 := [][]int{}
 	if rightColEmpty {
-		for _, row := range result {
-			result2 = append(result2, row[:len(result)])
-		}
-	} else {
-		result2 = result
+		mat = removeRightColumn(mat)
 	}
 
 	if topRowEmpty || bottomRowEmpty || leftColEmpty || rightColEmpty {
-		result2 = TrimPadding(result2)
+		mat = TrimPadding(mat)
 	}
+	return mat
+}
 
-	return result2
+func removeTopRow(mat [][]int) [][]int {
+	return mat[1:]
+}
+
+func removeBottomRow(mat [][]int) [][]int {
+	return mat[:len(mat)-1]
+}
+
+func removeLeftColumn(mat [][]int) [][]int {
+	result := [][]int{}
+	for _, row := range mat {
+		result = append(result, row[1:])
+	}
+	return result
+}
+
+func removeRightColumn(mat [][]int) [][]int {
+	result := [][]int{}
+	for _, row := range mat {
+		result = append(result, row[:len(mat)])
+	}
+	return result
 }
