@@ -85,6 +85,12 @@ func isDead(mat [][]int) bool {
 	return true
 }
 
+func (pattern *Pattern) ToRLE() string {
+	var sb strings.Builder
+	fmt.Fprintf(&sb, "x = %v, y = %v\n", pattern.X, pattern.Y)
+	return sb.String()
+}
+
 func (pattern *Pattern) ToString() string {
 	var sb strings.Builder
 	for _, row := range pattern.Cells {

@@ -9,6 +9,9 @@ import (
 )
 
 func main() {
+	if len(os.Args) < 2 {
+		log.Fatal("missing filepath")
+	}
 	path := os.Args[1]
 	raw, err := rle_parser.ParseRleFile(path)
 	if err != nil {

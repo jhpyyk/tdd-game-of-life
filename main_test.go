@@ -17,12 +17,8 @@ func TestMain(t *testing.T) {
 		}
 
 		got := utils.StripPattern(string(out))
-		block := `
-		##
-		##
-		`
+		want := "x = 2, y = 2\n2o$2o!"
 
-		want := utils.StripPattern(block)
 		if got != want {
 			t.Fatalf("wrong output, wanted %q, got %q", want, got)
 		}
