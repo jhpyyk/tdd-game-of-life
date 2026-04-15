@@ -67,6 +67,12 @@ func GetSubMatrix(mat [][]int, x, y, sizeX, sizeY int) [][]int {
 }
 
 func TrimPadding(mat [][]int) [][]int {
+	if len(mat) < 2 {
+		return mat
+	}
+	if len(mat[0]) < 2 {
+		return mat
+	}
 	topRowEmpty := true
 	for _, col := range mat[0] {
 		if col != 0 {
@@ -137,7 +143,7 @@ func removeLeftColumn(mat [][]int) [][]int {
 func removeRightColumn(mat [][]int) [][]int {
 	result := [][]int{}
 	for _, row := range mat {
-		result = append(result, row[:len(mat)])
+		result = append(result, row[:len(row)-1])
 	}
 	return result
 }

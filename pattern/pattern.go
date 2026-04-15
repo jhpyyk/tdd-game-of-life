@@ -10,14 +10,14 @@ import (
 )
 
 type Pattern struct {
-	x          int
-	y          int
-	generation int
-	cells      [][]int
+	X          int
+	Y          int
+	Generation int
+	Cells      [][]int
 }
 
 func (pattern *Pattern) GetNextGeneration() Pattern {
-	padded1 := utils.PadMatrix(pattern.cells)
+	padded1 := utils.PadMatrix(pattern.Cells)
 	padded2 := utils.PadMatrix(padded1)
 
 	result := utils.ZeroMatrix(len(padded1), len(padded1[0]))
@@ -49,20 +49,45 @@ func (pattern *Pattern) GetNextGeneration() Pattern {
 		}
 	}
 	result = utils.TrimPadding(result)
+	if isDead(result) {
+		return Pattern{
+			0,
+			0,
+			pattern.Generation + 1,
+			[][]int{},
+		}
+	}
 
 	nextGen := Pattern{
-		x:          len(result),
-		y:          len(result[0]),
-		generation: pattern.generation + 1,
-		cells:      result,
+		X:          len(result),
+		Y:          len(result[0]),
+		Generation: pattern.Generation + 1,
+		Cells:      result,
 	}
 
 	return nextGen
 }
 
+func isDead(mat [][]int) bool {
+	if len(mat) == 0 {
+		return true
+	}
+	if len(mat[0]) == 0 {
+		return true
+	}
+	for _, row := range mat {
+		for _, col := range row {
+			if col != 0 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 func (pattern *Pattern) ToString() string {
 	var sb strings.Builder
-	for _, row := range pattern.cells {
+	for _, row := range pattern.Cells {
 		for _, cell := range row {
 			if cell == 1 {
 				sb.WriteRune('#')
@@ -142,10 +167,10 @@ func ParsePatternFromRLEPatternString(x int, y int, pattern string) (Pattern, er
 		repeat = 0
 	}
 	pat := Pattern{
-		x:          x,
-		y:          y,
-		generation: 0,
-		cells:      cells,
+		X:          x,
+		Y:          y,
+		Generation: 0,
+		Cells:      cells,
 	}
 
 	return pat, nil

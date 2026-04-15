@@ -60,18 +60,17 @@ const (
 			##.
 		`
 
-	// dieHard = `
-	// ......#.
-	// ##......
-	// .#...###
-	// `
+	dieHard = `
+	......#.
+	##......
+	.#...###
+	`
 
-	// dieHard129 = `
+	dieHard129 = `
 	// #
 	// #
 	// `
-	// dieHard130 = ""
-
+	dieHard130 = ""
 )
 
 func TestPatternParser(t *testing.T) {
@@ -119,19 +118,19 @@ func TestPatternGeneration(t *testing.T) {
 	}
 
 	testCases := []TestCase{
-		// {"block", 2, 2, 1, block, block},
-		// {"block stays still", 2, 2, 50, block, block},
-		// {"block without corner", 2, 2, 1, blockNoCorner, block},
-		// {"block without corner stays still", 2, 2, 50, blockNoCorner, block},
-		// {"glider after 1", 3, 3, 1, glider, gliderAfter1},
-		// {"glider after 2", 3, 3, 2, glider, gliderAfter2},
-		// {"glider after 3", 3, 3, 3, glider, gliderAfter3},
-		// {"glider after 4", 3, 3, 4, glider, glider},
-		// {"glider after 8", 3, 3, 4, glider, glider},
-		// {"glider after 16", 3, 3, 4, glider, glider},
-		// {"separated blocks", 7, 2, 1, blocksSeparated, blocksSeparated},
-		// {"die hard generation before vanishing", 8, 3, 129, dieHard, dieHard129},
-		// {"die hard empty", 8, 3, 130, dieHard, dieHard130},
+		{"block", 2, 2, 1, block, block},
+		{"block stays still", 2, 2, 50, block, block},
+		{"block without corner", 2, 2, 1, blockNoCorner, block},
+		{"block without corner stays still", 2, 2, 50, blockNoCorner, block},
+		{"glider after 1", 3, 3, 1, glider, gliderAfter1},
+		{"glider after 2", 3, 3, 2, glider, gliderAfter2},
+		{"glider after 3", 3, 3, 3, glider, gliderAfter3},
+		{"glider after 4", 3, 3, 4, glider, glider},
+		{"glider after 8", 3, 3, 4, glider, glider},
+		{"glider after 16", 3, 3, 4, glider, glider},
+		{"separated blocks", 7, 2, 1, blocksSeparated, blocksSeparated},
+		{"die hard generation before vanishing", 8, 3, 129, dieHard, dieHard129},
+		{"die hard empty", 8, 3, 130, dieHard, dieHard130},
 	}
 	for _, testCase := range testCases {
 		t.Run("test pattern generation", func(t *testing.T) {
@@ -176,6 +175,35 @@ func TestPatternStringConversion(t *testing.T) {
 
 		got := utils.StripPattern(pattern.ToString())
 		want := utils.StripPattern(blocksSeparated)
+		if got != want {
+			t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)
+		}
+	})
+
+	t.Run("converts FromString empty", func(t *testing.T) {
+		pattern, err := pattern.FromString(0, 0, "")
+		if err != nil {
+			t.Fatal(err.Error())
+		}
+
+		got := utils.StripPattern(pattern.ToString())
+		want := utils.StripPattern("")
+		if got != want {
+			t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)
+		}
+	})
+
+	t.Run("converts ToString empty", func(t *testing.T) {
+		pat := pattern.Pattern{
+			0,
+			0,
+			0,
+			[][]int{},
+		}
+		patString := pat.ToString()
+
+		got := utils.StripPattern(patString)
+		want := utils.StripPattern("")
 		if got != want {
 			t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)
 		}

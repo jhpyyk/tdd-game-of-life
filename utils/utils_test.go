@@ -114,22 +114,32 @@ func TestTrimPadding(t *testing.T) {
 			}
 		}
 	})
-	// t.Run("should trim two blocks 2", func(t *testing.T) {
-	// 	mat := [][]int{
-	// 		{0, 0, 0, 0, 0, 0, 0, 0},
-	// 		{0, 1, 1, 0, 0, 1, 1, 0},
-	// 		{0, 1, 1, 0, 0, 1, 1, 0},
-	// 		{0, 0, 0, 0, 0, 0, 0, 0},
-	// 	}
-	// 	want := [][]int{
-	// 		{1, 1, 0, 0, 1, 1},
-	// 		{1, 1, 0, 0, 1, 1},
-	// 	}
-	// 	got := utils.TrimPadding(mat)
-	// 	for i := range want {
-	// 		if !slices.Equal(got[i], want[i]) {
-	// 			t.Fatalf("trim padding not working, wanted %v, got %v", want, got)
-	// 		}
-	// 	}
-	// })
+	t.Run("should trim two blocks 2", func(t *testing.T) {
+		mat := [][]int{
+			{0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 1, 1, 0, 0, 1, 1, 0},
+			{0, 1, 1, 0, 0, 1, 1, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0},
+		}
+		want := [][]int{
+			{1, 1, 0, 0, 1, 1},
+			{1, 1, 0, 0, 1, 1},
+		}
+		got := utils.TrimPadding(mat)
+		for i := range want {
+			if !slices.Equal(got[i], want[i]) {
+				t.Fatalf("trim padding not working, wanted %v, got %v", want, got)
+			}
+		}
+	})
+	t.Run("should trim empty", func(t *testing.T) {
+		mat := [][]int{}
+		want := [][]int{}
+		got := utils.TrimPadding(mat)
+		for i := range want {
+			if !slices.Equal(got[i], want[i]) {
+				t.Fatalf("trim padding not working, wanted %v, got %v", want, got)
+			}
+		}
+	})
 }
