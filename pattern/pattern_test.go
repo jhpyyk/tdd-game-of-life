@@ -66,20 +66,34 @@ func TestPatternParser(t *testing.T) {
 
 func TestPatternGeneration(t *testing.T) {
 	type TestCase struct {
-		name    string
-		x       int
-		y       int
-		pattern string
-		want    string
+		name        string
+		x           int
+		y           int
+		generations int
+		pattern     string
+		want        string
 	}
 	blockNoCorner := `
 	#.
 	##
 	`
 
+	glider := `
+	.#.
+	..#
+	###
+	`
+
+	gliderAfter1 := `
+		#.#
+		.##
+		.#.
+	`
+
 	testCases := []TestCase{
-		{"block", 2, 2, block, block},
-		{"block without corner", 2, 2, blockNoCorner, block},
+		{"block", 2, 2, 1, block, block},
+		{"block without corner", 2, 2, 1, blockNoCorner, block},
+		{"glider", 3, 3, 1, glider, gliderAfter1},
 	}
 	for _, testCase := range testCases {
 		t.Run("test pattern generation", func(t *testing.T) {
@@ -89,9 +103,10 @@ func TestPatternGeneration(t *testing.T) {
 				t.Fatal(err.Error())
 			}
 
-			nextGen := pattern.GetNextGeneration()
-
-			got := utils.StripPattern(nextGen.ToString())
+			for range testCase.generations {
+				pattern = pattern.GetNextGeneration()
+			}
+			got := utils.StripPattern(pattern.ToString())
 			want := utils.StripPattern(testCase.want)
 			if got != want {
 				t.Fatalf("failed to get next generation for %q, want %q, got %q", testCase.name, want, got)
