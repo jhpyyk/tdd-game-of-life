@@ -6,6 +6,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/jhpyyk/tdd-game-of-life/rle_parser"
 	"github.com/jhpyyk/tdd-game-of-life/utils"
 )
 
@@ -85,10 +86,47 @@ func isDead(mat [][]int) bool {
 	return true
 }
 
-func (pattern *Pattern) ToRLE() string {
+func (pattern *Pattern) ToRLE() (string, error) {
 	var sb strings.Builder
 	fmt.Fprintf(&sb, "x = %v, y = %v\n", pattern.X, pattern.Y)
-	return sb.String()
+	for i, row := range pattern.Cells {
+		count, cellValue := countRecurringCells(row)
+		cellSymbol, err := rle_parser.TranslateIntToRLESymbol(cellValue)
+		if err != nil {
+			return "", err
+		}
+
+		if count == 1 {
+			fmt.Fprintf(&sb, "%q!", cellSymbol)
+		} else if i == len(pattern.Cells)-1 {
+			fmt.Fprintf(&sb, "%d%c!", count, cellSymbol)
+		} else {
+			fmt.Fprintf(&sb, "%d%c$", count, cellSymbol)
+		}
+	}
+	return sb.String(), nil
+}
+
+func countRecurringCells(cells []int) (count int, cellValue int) {
+	if len(cells) < 1 {
+		return 0, 0
+	}
+	if len(cells) < 2 {
+		return 1, cells[0]
+	}
+	cellValue = 0
+	count = 0
+	for i, c := range cells {
+		count = i + 1
+		if i == 0 {
+			cellValue = c
+			continue
+		}
+		if cells[i-1] != cells[i] {
+			break
+		}
+	}
+	return count, cellValue
 }
 
 func (pattern *Pattern) ToString() string {

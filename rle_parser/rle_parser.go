@@ -112,3 +112,25 @@ func parseIntFromString(in string) (string, error) {
 	trimmed := strings.TrimSpace(numeric)
 	return trimmed, nil
 }
+
+// func TranslateRLESymbolToInt(symbol rune) (int, error) {
+// 	switch symbol {
+// 	case 'b':
+// 		return 0, nil
+// 	case 'o':
+// 		return 1, nil
+// 	default:
+// 		return 0, fmt.Errorf("Error translating RLE rune to int: Unexpected rune %q", symbol)
+// 	}
+// }
+
+func TranslateIntToRLESymbol(integer int) (rune, error) {
+	switch integer {
+	case 0:
+		return 'b', nil
+	case 1:
+		return 'o', nil
+	default:
+		return 'x', fmt.Errorf("Error translating int to RLE symbol: Unexpected integer %v", integer)
+	}
+}

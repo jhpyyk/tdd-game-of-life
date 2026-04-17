@@ -3,8 +3,6 @@ package main
 import (
 	"os/exec"
 	"testing"
-
-	"github.com/jhpyyk/tdd-game-of-life/utils"
 )
 
 func TestMain(t *testing.T) {
@@ -16,8 +14,8 @@ func TestMain(t *testing.T) {
 			t.Fatalf("error while running main %q", err.Error())
 		}
 
-		got := utils.StripPattern(string(out))
-		want := "x = 2, y = 2\n2o$2o!"
+		got := string(out)
+		want := "x = 2, y = 2\n2o$2o!\n"
 
 		if got != want {
 			t.Fatalf("wrong output, wanted %q, got %q", want, got)

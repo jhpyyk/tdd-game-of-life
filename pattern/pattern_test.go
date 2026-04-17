@@ -215,7 +215,10 @@ func TestPatternStringConversion(t *testing.T) {
 			t.Fatal(err.Error())
 		}
 
-		got := pattern.ToRLE()
+		got, err := pattern.ToRLE()
+		if err != nil {
+			t.Fatal("Parser failed to parse pattern", err)
+		}
 		want := "x = 2, y = 2\n2o$2o!"
 		if got != want {
 			t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)

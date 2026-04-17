@@ -21,5 +21,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	println(pat.ToString())
+	println(pat.ToRLE())
 }
