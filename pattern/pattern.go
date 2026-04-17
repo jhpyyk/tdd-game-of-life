@@ -88,45 +88,67 @@ func isDead(mat [][]int) bool {
 
 func (pattern *Pattern) ToRLE() (string, error) {
 	var sb strings.Builder
-	fmt.Fprintf(&sb, "x = %v, y = %v\n", pattern.X, pattern.Y)
+	fmt.Fprintf(&sb, "x = %d, y = %d\n", pattern.X, pattern.Y)
 	for i, row := range pattern.Cells {
-		count, cellValue := countRecurringCells(row)
-		cellSymbol, err := rle_parser.TranslateIntToRLESymbol(cellValue)
+		rleRow := ""
+		var err error
+		if i == len(pattern.Cells)-1 {
+			rleRow, err = translateRowToRLERow(row, true)
+		} else {
+			rleRow, err = translateRowToRLERow(row, false)
+		}
 		if err != nil {
 			return "", err
 		}
-
-		if count == 1 {
-			fmt.Fprintf(&sb, "%q!", cellSymbol)
-		} else if i == len(pattern.Cells)-1 {
-			fmt.Fprintf(&sb, "%d%c!", count, cellSymbol)
-		} else {
-			fmt.Fprintf(&sb, "%d%c$", count, cellSymbol)
-		}
+		sb.WriteString(rleRow)
 	}
 	return sb.String(), nil
 }
 
-func countRecurringCells(cells []int) (count int, cellValue int) {
+func translateRowToRLERow(row []int, lastRow bool) (string, error) {
+	var sb strings.Builder
+	rowIndex := 0
+	for rowIndex < len(row) {
+		count, cellValue := countRecurringCells(row[rowIndex:])
+		rowIndex = rowIndex + count
+
+		cellSymbol, err := rle_parser.TranslateIntToRLESymbol(cellValue)
+		if err != nil {
+			return "", err
+		}
+		if count == 1 {
+			fmt.Fprintf(&sb, "%c", cellSymbol)
+		} else {
+			fmt.Fprintf(&sb, "%d%c", count, cellSymbol)
+		}
+	}
+
+	if lastRow {
+		fmt.Fprintf(&sb, "!")
+	} else {
+		fmt.Fprintf(&sb, "$")
+	}
+	return sb.String(), nil
+}
+
+func countRecurringCells(cells []int) (int, int) {
 	if len(cells) < 1 {
 		return 0, 0
 	}
+	cellValue := cells[0]
 	if len(cells) < 2 {
-		return 1, cells[0]
+		return 1, cellValue
 	}
-	cellValue = 0
-	count = 0
-	for i, c := range cells {
-		count = i + 1
-		if i == 0 {
-			cellValue = c
-			continue
-		}
+
+	i := 1
+	for i < len(cells) {
 		if cells[i-1] != cells[i] {
-			break
+			return i, cellValue
 		}
+		i++
 	}
-	return count, cellValue
+
+	return i, cellValue
 }
 
 func (pattern *Pattern) ToString() string {

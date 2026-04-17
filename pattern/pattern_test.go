@@ -209,19 +209,33 @@ func TestPatternStringConversion(t *testing.T) {
 		}
 	})
 
-	t.Run("converts to RLE", func(t *testing.T) {
-		pattern, err := pattern.FromString(2, 2, block)
-		if err != nil {
-			t.Fatal(err.Error())
-		}
+	type RLECases struct {
+		x    int
+		y    int
+		pat  string
+		want string
+	}
 
-		got, err := pattern.ToRLE()
-		if err != nil {
-			t.Fatal("Parser failed to parse pattern", err)
-		}
-		want := "x = 2, y = 2\n2o$2o!"
-		if got != want {
-			t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)
-		}
-	})
+	rleCases := []RLECases{
+		{2, 2, block, "x = 2, y = 2\n2o$2o!"},
+		{6, 1, ".#.#.#", "x = 6, y = 1\nbobobo!"},
+	}
+
+	for _, rle := range rleCases {
+		t.Run("converts to RLE", func(t *testing.T) {
+			pattern, err := pattern.FromString(rle.x, rle.y, rle.pat)
+			if err != nil {
+				t.Fatal(err.Error())
+			}
+
+			got, err := pattern.ToRLE()
+			if err != nil {
+				t.Fatal("Parser failed to parse pattern", err)
+			}
+			if got != rle.want {
+				t.Fatalf("Parser failed to parse pattern, want %q, got %q", rle.want, got)
+			}
+		})
+	}
+
 }
