@@ -8,7 +8,7 @@ import (
 )
 
 func TestVisualizer(t *testing.T) {
-	t.Run("test visualizer draws frame", func(t *testing.T) {
+	t.Run("should draw frame", func(t *testing.T) {
 		buffer := bytes.Buffer{}
 		visualizer.DrawFrame(&buffer, "#")
 		got := buffer.String()
@@ -19,7 +19,7 @@ func TestVisualizer(t *testing.T) {
 			t.Errorf("wanted %q, got %q", want, got)
 		}
 	})
-	t.Run("test visualizer clears frame before drawing new one", func(t *testing.T) {
+	t.Run("should start drawing next frame from the start", func(t *testing.T) {
 		buffer := bytes.Buffer{}
 		visualizer.DrawFrame(&buffer, "#")
 		visualizer.DrawFrame(&buffer, "#")
