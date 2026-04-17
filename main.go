@@ -1,12 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/jhpyyk/tdd-game-of-life/pattern"
 	"github.com/jhpyyk/tdd-game-of-life/rle_parser"
+	"github.com/jhpyyk/tdd-game-of-life/visualizer"
 )
 
 func main() {
@@ -15,6 +18,10 @@ func main() {
 	}
 	if len(os.Args) < 3 {
 		log.Fatal("missing generations")
+	}
+	draw := false
+	if len(os.Args) == 4 && os.Args[3] == "--draw" {
+		draw = true
 	}
 	path := os.Args[1]
 	raw, err := rle_parser.ParseRleFile(path)
@@ -29,9 +36,23 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	if draw {
+		visualizer.EnterAltScreen()
+		defer visualizer.ExitAltScreen()
+	}
 	for range generations {
 		pat = pat.GetNextGeneration()
+		if draw {
+			frame := visualizer.Frame{
+				Header:  fmt.Sprintf("Generation %d", pat.Generation),
+				Content: pat.ToString(),
+			}
+			visualizer.DrawFrame(os.Stdout, frame)
+			time.Sleep(300 * time.Millisecond)
+		}
 	}
+
 	rle, err := pat.ToRLE()
 	if err != nil {
 		log.Fatal(err)
