@@ -221,6 +221,11 @@ func TestPatternStringConversion(t *testing.T) {
 		{6, 1, ".#.#.#", "x = 6, y = 1\nbobobo!"},
 		{3, 1, ".#.", "x = 3, y = 1\nbo!"},
 		{6, 2, ".#.#.#\n#.#.#.", "x = 6, y = 2\nbobobo$obobo!"},
+		{6, 2, ".#.#.#\n#.#.#.", "x = 6, y = 2\nbobobo$obobo!"},
+		{13, 2, trailing, "x = 13, y = 2\no$o!"},
+		{13, 2, preceeding, "x = 13, y = 2\n12bo$12bo!"},
+		{1, 1, "#", "x = 1, y = 1\no!"},
+		{0, 0, "", "x = 0, y = 0\n"},
 	}
 
 	for _, rle := range rleCases {
