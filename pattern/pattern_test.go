@@ -219,6 +219,8 @@ func TestPatternStringConversion(t *testing.T) {
 	rleCases := []RLECases{
 		{2, 2, block, "x = 2, y = 2\n2o$2o!"},
 		{6, 1, ".#.#.#", "x = 6, y = 1\nbobobo!"},
+		{3, 1, ".#.", "x = 3, y = 1\nbo!"},
+		{6, 2, ".#.#.#\n#.#.#.", "x = 6, y = 2\nbobobo$obobo!"},
 	}
 
 	for _, rle := range rleCases {

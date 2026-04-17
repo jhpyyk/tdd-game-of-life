@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"slices"
 	"strings"
 )
 
@@ -146,4 +147,13 @@ func removeRightColumn(mat [][]int) [][]int {
 		result = append(result, row[:len(row)-1])
 	}
 	return result
+}
+
+func RemoveTrailingZeros(arr []int) []int {
+	for i, element := range slices.Backward(arr) {
+		if element != 0 {
+			return arr[:i+1]
+		}
+	}
+	return []int{}
 }

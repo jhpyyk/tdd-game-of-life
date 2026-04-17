@@ -90,6 +90,7 @@ func (pattern *Pattern) ToRLE() (string, error) {
 	var sb strings.Builder
 	fmt.Fprintf(&sb, "x = %d, y = %d\n", pattern.X, pattern.Y)
 	for i, row := range pattern.Cells {
+		row = utils.RemoveTrailingZeros(row)
 		rleRow := ""
 		var err error
 		if i == len(pattern.Cells)-1 {
