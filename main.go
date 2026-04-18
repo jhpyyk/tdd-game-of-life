@@ -43,13 +43,20 @@ func main() {
 	}
 	for range generations {
 		pat = pat.GetNextGeneration()
+		if pat.X < 1 || pat.Y < 0 {
+			break
+		}
 		if draw {
+			patString, err := pat.ToStringFixedSize(40)
+			if err != nil {
+				log.Fatal(err)
+			}
 			frame := visualizer.Frame{
 				Header:  fmt.Sprintf("Generation %d", pat.Generation),
-				Content: pat.ToString(),
+				Content: patString,
 			}
 			visualizer.DrawFrame(os.Stdout, frame)
-			time.Sleep(300 * time.Millisecond)
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 

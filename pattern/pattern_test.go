@@ -173,8 +173,8 @@ func TestPatternStringConversion(t *testing.T) {
 			t.Fatal(err.Error())
 		}
 
-		got := utils.StripPattern(pattern.ToString())
-		want := utils.StripPattern(blocksSeparated)
+		got := pattern.ToString()
+		want := "##...##\n##...##\n"
 		if got != want {
 			t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)
 		}
@@ -209,6 +209,75 @@ func TestPatternStringConversion(t *testing.T) {
 		}
 	})
 
+	t.Run("ToStringLimitedSize should increase the size", func(t *testing.T) {
+		pattern, err := pattern.FromString(2, 2, block)
+		if err != nil {
+			t.Fatal(err.Error())
+		}
+
+		patString, err := pattern.ToStringFixedSize(4)
+		if err != nil {
+			t.Fatal(err.Error())
+		}
+		got := utils.StripPattern(patString)
+		blockPadded := `
+		....
+		.##.
+		.##.
+		....
+		`
+		want := utils.StripPattern(blockPadded)
+		if got != want {
+			t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)
+		}
+	})
+
+	t.Run("ToStringLimitedSize should increase the from 2x2 to 6x6", func(t *testing.T) {
+		pattern, err := pattern.FromString(2, 2, block)
+		if err != nil {
+			t.Fatal(err.Error())
+		}
+
+		patString, err := pattern.ToStringFixedSize(6)
+		if err != nil {
+			t.Fatal(err.Error())
+		}
+		got := utils.StripPattern(patString)
+		blockPadded := `
+			......
+			......
+			..##..
+			..##..
+			......
+			......
+			`
+		want := utils.StripPattern(blockPadded)
+		if got != want {
+			t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)
+		}
+	})
+
+	t.Run("ToStringLimitedSize should decrease the size", func(t *testing.T) {
+		println("decrease test")
+		pattern, err := pattern.FromString(2, 1, short)
+		if err != nil {
+			t.Fatal(err.Error())
+		}
+
+		patString, err := pattern.ToStringFixedSize(1)
+		if err != nil {
+			t.Fatal(err.Error())
+		}
+		got := utils.StripPattern(patString)
+		blockPadded := `
+		.
+			`
+		want := utils.StripPattern(blockPadded)
+		if got != want {
+			t.Fatalf("Parser failed to parse pattern, want %q, got %q", want, got)
+		}
+
+	})
 	type RLECases struct {
 		x    int
 		y    int

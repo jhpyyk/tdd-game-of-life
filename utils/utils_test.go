@@ -54,9 +54,8 @@ func TestGetSubMatrix(t *testing.T) {
 	want := [][]int{
 		{1, 1, 1},
 		{1, 1, 1},
-		{1, 1, 1},
 	}
-	got := utils.GetSubMatrix(mat, 1, 1, 3, 3)
+	got := utils.GetSubMatrix(mat, 1, 1, 3, 2)
 
 	for i := range want {
 		if !slices.Equal(got[i], want[i]) {

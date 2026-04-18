@@ -57,10 +57,10 @@ func ZeroMatrix(rows, cols int) [][]int {
 func GetSubMatrix(mat [][]int, x, y, sizeX, sizeY int) [][]int {
 	subMat := [][]int{}
 
-	for i := x; i < x+sizeX; i++ {
+	for i := y; i < y+sizeY; i++ {
 		row := []int{}
-		for j := y; j < y+sizeY; j++ {
-			row = append(row, mat[i][j])
+		for j := x; j < x+sizeX; j++ {
+			row = append(row, mat[j][i])
 		}
 		subMat = append(subMat, row)
 	}
@@ -156,4 +156,12 @@ func RemoveTrailingZeros(arr []int) []int {
 		}
 	}
 	return []int{}
+}
+func DeepCopyMatrix(mat [][]int) [][]int {
+	out := make([][]int, len(mat))
+	for i := range mat {
+		out[i] = make([]int, len(mat[i]))
+		copy(out[i], mat[i])
+	}
+	return out
 }

@@ -2,6 +2,7 @@ package pattern
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 	"unicode"
@@ -152,6 +153,40 @@ func countRecurringCells(cells []int) (int, int) {
 	return i, cellValue
 }
 
+func (pattern *Pattern) ToStringFixedSize(size int) (string, error) {
+	if size < 1 || pattern.X < 1 || pattern.Y < 1 {
+		return "", nil
+	}
+	var sb strings.Builder
+
+	displayCells := utils.DeepCopyMatrix(pattern.Cells)
+
+	maxPat := math.Max(float64(pattern.X), float64(pattern.Y))
+	diff := int(float64(size) - maxPat)
+	if diff > 0 {
+		for range int(math.Floor(float64(diff / 2))) {
+			displayCells = utils.PadMatrix(displayCells)
+		}
+	}
+
+	if diff < 0 {
+		startX := int(math.Ceil((float64(size) - maxPat) / 2))
+		startY := int(math.Ceil((float64(size) - maxPat) / 2))
+		displayCells = utils.GetSubMatrix(displayCells, startX, startY, size, size)
+	}
+	for _, row := range displayCells {
+		for _, cell := range row {
+			if cell == 1 {
+				sb.WriteRune('#')
+			}
+			if cell == 0 {
+				sb.WriteRune('.')
+			}
+		}
+		sb.WriteRune('\n')
+	}
+	return sb.String(), nil
+}
 func (pattern *Pattern) ToString() string {
 	var sb strings.Builder
 	for _, row := range pattern.Cells {
